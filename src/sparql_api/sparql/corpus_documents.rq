@@ -1,0 +1,13 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmcls: <https://clscor.io/ontologies/CRMcls/>
+PREFIX lrm: <http://iflastandards.info/ns/lrm/lrmoo/>
+
+select ?document_uri ?document_label ?corpus_uri ?corpus_label
+where {
+  ?document_uri a crmcls:X2_Corpus_Document ;
+  rdfs:label ?document_label ;
+  lrm:R71i_is_part_of ?corpus_uri .
+  
+  ?corpus_uri rdfs:label ?corpus_label
+}

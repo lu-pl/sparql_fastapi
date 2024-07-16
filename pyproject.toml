@@ -1,0 +1,26 @@
+[project]
+name = "sparql-api"
+version = "0.1.0"
+description = "Playground for connecting a FastAPI app to a remote triplestore"
+authors = [
+    {name = "Lukas Plank", email = "lupl@tuta.io"},
+]
+dependencies = [
+    "fastapi[all]>=0.111.1",
+    "sparqlwrapper>=2.0.0",
+    "python-dotenv>=1.0.1",
+    "toolz>=0.12.1",
+    "SPARQLTransformer>=2.4.0",
+    "fastapi-pagination>=0.12.26",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "PL-3"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
