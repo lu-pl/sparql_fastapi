@@ -2,7 +2,7 @@
 
 from SPARQLWrapper import SPARQLWrapper, QueryResult
 from pydantic import BaseModel
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 
 class SPARQLAdapter:
@@ -14,9 +14,11 @@ class SPARQLAdapter:
     def __call__[
         ModelType: BaseModel
     ](
-        self, query: str, model_constructor: Callable[[QueryResult], ModelType]
-    ) -> ModelType:
-        """Execute query using sparql_wrapper and pass the result to model_constructor.
+        self,
+        query: str,
+        model_constructor: Callable[[QueryResult], Sequence[ModelType]],
+    ) -> Sequence[ModelType]:
+        """Execute query using sparql_wrapper and pass the result to a model_constructor.
 
         model_constructor is responsible for instantiating a Pydantic model.
         """
