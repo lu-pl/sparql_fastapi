@@ -4,6 +4,8 @@
 scratch.py
 notes.org
 
+\#.*
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
