@@ -6,6 +6,18 @@
 
 ## Installation
 
+### Container
+Build an image and run it:
+
+```shell
+git clone https://github.com/lu-pl/sparql_fastapi.git
+cd sparql_fastapi
+
+docker build . -t sparql-fastapi
+docker run -p 80:80 sparql-fastapi 
+```
+
+### Source
 Activate a virtual environment and run:
 
 ```shell
