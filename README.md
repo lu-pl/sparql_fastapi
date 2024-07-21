@@ -4,6 +4,8 @@
 
 * Python >= 3.12
 
+Also a .env file with `password=<supersecretpassword>` is required.
+
 ## Installation
 
 ### Container
