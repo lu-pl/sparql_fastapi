@@ -19,8 +19,10 @@ load_dotenv()
 
 app = FastAPI()
 
-sparql = SPARQLWrapper("https://triplestore.acdh-dev.oeaw.ac.at/clscor/sparql")
-sparql.setCredentials("clscor", os.getenv("password"))
+# sparql = SPARQLWrapper("https://triplestore.acdh-dev.oeaw.ac.at/clscor/sparql")
+# sparql.setCredentials("clscor", os.getenv("password"))
+
+sparql = SPARQLWrapper("https://clscor.acdh-dev.oeaw.ac.at/sparql")
 sparql.setReturnFormat(JSON)
 
 adapter = SPARQLAdapter(sparql_wrapper=sparql)
