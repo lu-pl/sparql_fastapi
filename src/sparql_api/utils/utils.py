@@ -38,20 +38,20 @@ def instantiate_model_from_kwargs[
 
         model = instantiate_model_from_kwargs(NestedModel, a="test", x=1, y=2)
         print(model)  # a='test' b=None c=SimpleModel(x=1, y=2)
-
     """
 
     def _get_bindings(model: type[ModelType], **kwargs) -> dict:
         """Get the bindings needed for model instantation.
 
-        The function recursively traverses model.model_fields
+        The function traverses model.model_fields
         and constructs a bindings dict by either getting values from kwargs or field defaults.
+        For model fields the recursive clause runs.
 
         Note: This needs exception handling and proper testing.
         """
         return {
             k: (
-                _get_bindings(v.annotation, **kwargs)
+                v.annotation(**_get_bindings(v.annotation, **kwargs))
                 if isinstance(v.annotation, type(BaseModel))
                 else kwargs.get(k, v.default)
             )
