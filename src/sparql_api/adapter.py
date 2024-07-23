@@ -1,30 +1,42 @@
-"""SPARQLAdapter."""
+"""SPARQLModelAdapter."""
 
-from SPARQLWrapper import SPARQLWrapper, QueryResult
-from pydantic import BaseModel
 from collections.abc import Callable, Sequence
 
+from SPARQLWrapper import JSON, QueryResult, SPARQLWrapper
+from pydantic import BaseModel
+from sparql_api.utils.utils import (
+    get_bindings_from_query_result,
+    instantiate_model_from_kwargs,
+)
 
-class SPARQLAdapter:
-    """SPARQL Adapter for QueryResult to Pydantic model conversions."""
 
-    def __init__(self, sparql_wrapper: SPARQLWrapper):
+class SPARQLModelAdapter[ModelType: BaseModel]:
+    """Adapter/Mapper for QueryResult to Pydantic model conversions."""
+
+    def __init__(self, sparql_wrapper: SPARQLWrapper) -> None:
         self.sparql_wrapper = sparql_wrapper
 
-    def __call__[
-        ModelType: BaseModel
-    ](
-        self,
-        query: str,
-        model_constructor: Callable[[QueryResult], Sequence[ModelType]],
-    ) -> Sequence[ModelType]:
-        """Execute query using sparql_wrapper and pass the result to a model_constructor.
+        if self.sparql_wrapper.returnFormat != "json":
+            self.sparql_wrapper.setReturnFormat(JSON)
 
-        model_constructor is responsible for instantiating a Pydantic model.
-        """
+    def __call__(self, query: str, model_constructor) -> Sequence[ModelType]:
         self.sparql_wrapper.setQuery(query)
+        query_result: QueryResult = self.sparql_wrapper.query()
 
-        query_result = self.sparql_wrapper.query()
-        model = model_constructor(query_result)
+        if isinstance(model_constructor, type(BaseModel)):
+            bindings = get_bindings_from_query_result(query_result)
+            models: list[ModelType] = [
+                instantiate_model_from_kwargs(model_constructor, **binding)
+                for binding in bindings
+            ]
 
-        return model
+        elif isinstance(model_constructor, Callable):
+            models: list[ModelType] = model_constructor(query_result)
+
+        else:
+            raise TypeError(
+                "Argument 'model_constructor' must be a model class "
+                "or a model constructor callable."
+            )
+
+        return models
